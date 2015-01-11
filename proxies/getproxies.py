@@ -115,7 +115,7 @@ def scrape_proxies():
 
     for i in range(1,page_nums+1):        
         proxies_page = _scrape_proxies("%d"%i)
-        proxies_page_valid = [proxy for proxy in proxies_page if proxy.country == "cn" and (proxy.protocol == "http") and proxy.speed > 50]
+        proxies_page_valid = [proxy for proxy in proxies_page if proxy.country == "cn" and (proxy.protocol == "http")]
         proxies.extend(proxies_page_valid)
 
     valid_proxies = [ {"ip":p.ip,"port":p.port,"protocol":p.protocol} for p in proxies if _test_proxy(p)]

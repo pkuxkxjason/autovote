@@ -19,6 +19,6 @@ def vote(proxy):
 
 
 if __name__ == "__main__":
-    #vote({"protocol":"http", "ip":"183.207.228.9","port":80})
+    vote({"protocol":"http", "ip":"183.207.228.9","port":80})
     
-    vote({"protocol":"https", "ip":"58.240.65.57","port":3128})
+    
