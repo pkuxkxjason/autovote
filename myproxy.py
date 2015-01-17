@@ -10,8 +10,10 @@ def proxy_nums():
 def load_proxy():
     global global_proxies
     local_proxies = []
-    with open("proxies.txt","r") as f:
+    with open("proxies_guonei.txt","r") as f:
         local_proxies = simplejson.loads(f.read())
+    with open("proxies_guowai.txt","r") as f:
+        local_proxies.extend(simplejson.loads(f.read()))
     for proxy in local_proxies:
         if proxy["ip"] not in global_proxies:
             proxy["times"] = 0

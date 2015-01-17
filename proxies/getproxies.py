@@ -18,9 +18,9 @@ class theproxy:
     def __str__(self):
         return "ip:%s\nport:%d\nprotocol:%s\ncountry:%s\nspeed:%d\n"%(self.ip,self.port,self.protocol,self.country,self.speed)
 
-def _scrape_proxies(page_num=""):
+def _scrape_proxies(page_num,category):
     conn = httplib.HTTPConnection('www.proxy360.net')
-    conn.request('GET','/guonei/%s'%page_num)
+    conn.request('GET','/%s/%s'%(category, page_num))
     response = conn.getresponse().read()
     #with open("response.html","w+") as f:
     #    f.write(response)
@@ -39,6 +39,9 @@ def _parse_response(response):
     proxies = []
     for row in rows:
         cols = col_sel(row)
+
+        if len(cols) < 7:
+            continue
         #cols[1]: ip
         #cols[2]: port
         #cols[3]: Country
@@ -74,12 +77,12 @@ def _parse_response(response):
         p.speed = int(m_result.group(1))
         p.protocol = cols[6].text_content().strip().lower()
         proxies.append(p)
-           
+
     return proxies
 
-def _get_page_numbers():
+def _get_page_numbers(category):
     conn = httplib.HTTPConnection('www.proxy360.net')
-    conn.request('GET','/guonei/')
+    conn.request('GET','/%s/'%category)
     response = conn.getresponse().read()
     tree = lxml.html.fromstring(response)
     sel = CSSSelector('div.pagination li a')
@@ -100,28 +103,28 @@ def _test_proxy(proxy):
     print "Testing:%s:%s:%d"%(proxy.protocol, proxy.ip, proxy.port),
     ok = False
     try:
-        r = requests.get('http://www.baidu.com',timeout=5, proxies = {proxy.protocol: '%s:%d'%(proxy.ip,proxy.port)})
+        r = requests.get('http://www.baidu.com/',timeout=5, proxies = {"http": '%s:%d'%(proxy.ip,proxy.port)})
         if r.status_code == 200:
             ok = True
-    except Exception:
+    except Exception,e:
         pass
     print ok
     return ok
 
 
-def scrape_proxies():
+def scrape_proxies(category):
     proxies = []
-    page_nums = _get_page_numbers()
+    page_nums = _get_page_numbers(category)
 
     for i in range(1,page_nums+1):        
-        proxies_page = _scrape_proxies("%d"%i)
-        proxies_page_valid = [proxy for proxy in proxies_page if proxy.country == "cn" and (proxy.protocol == "http")]
+        proxies_page = _scrape_proxies("%d"%i, category)
+        proxies_page_valid = [proxy for proxy in proxies_page]
         proxies.extend(proxies_page_valid)
 
     valid_proxies = [ {"ip":p.ip,"port":p.port,"protocol":p.protocol} for p in proxies if _test_proxy(p)]
     print len(valid_proxies),"/",len(proxies)
 
-    with open("proxies.txt","w+") as f:
+    with open("proxies_%s.txt" % category,"w+") as f:
         f.write(simplejson.dumps(valid_proxies))
 
 if __name__ == "__main__":
@@ -132,7 +135,13 @@ if __name__ == "__main__":
     
     #page_nums = _get_page_numbers()
     #print page_nums
-    scrape_proxies()
+
+    #scrape_proxies("guowai")
+    proxy = theproxy()
+    proxy.ip = "222.74.28.14"
+    proxy.port = 23
+    proxy.protocol = "http"
+    _test_proxy(proxy)
    
                    
             

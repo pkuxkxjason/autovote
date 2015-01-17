@@ -6,15 +6,19 @@ import time
 import sys
 import random
 
-def run(flag):
-    if flag <> '-l':
+def _safe_scrape_proxies(category):
         for i in range(10):
             try:
-                scrape_proxies()
+                scrape_proxies(category)
                 break
             except:
                 time.sleep(5)
                 continue
+
+def run(flag):
+    if flag <> '-l':
+        _safe_scrape_proxies("guonei")
+        _safe_scrape_proxies("guowai")
 
     myproxy.load_proxy()
     
