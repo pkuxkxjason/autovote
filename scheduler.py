@@ -1,5 +1,5 @@
 import settings
-import scraperloader
+import proxies.scraperloader
 import myproxy
 import voter
 import time
