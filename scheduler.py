@@ -1,24 +1,14 @@
 import settings
-from proxies.getproxies import scrape_proxies
+import scraperloader
 import myproxy
 import voter
 import time
 import sys
 import random
 
-def _safe_scrape_proxies(category):
-        for i in range(10):
-            try:
-                scrape_proxies(category)
-                break
-            except:
-                time.sleep(5)
-                continue
-
 def run(flag):
     if flag <> '-l':
-        _safe_scrape_proxies("guonei")
-        _safe_scrape_proxies("guowai")
+       scraperloader.load_scraper()
 
     myproxy.load_proxy()
     
