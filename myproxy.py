@@ -10,9 +10,11 @@ def proxy_nums():
 def load_proxy():
     global global_proxies
     local_proxies = []
-    with open("proxies_guonei.txt","r") as f:
+    with open("proxies_proxy360.net.guonei.txt","r") as f:
         local_proxies = simplejson.loads(f.read())
-    with open("proxies_guowai.txt","r") as f:
+    with open("proxies_proxy360.net.guowai.txt","r") as f:
+        local_proxies.extend(simplejson.loads(f.read()))
+    with open("proxies_proxy.com.ru.txt","r") as f:
         local_proxies.extend(simplejson.loads(f.read()))
     for proxy in local_proxies:
         if proxy["ip"] not in global_proxies:
@@ -24,6 +26,7 @@ def get_one_proxy():
     global global_proxies
     if len(global_proxies) == 0:
         load_proxy()
+    print len(global_proxies)
     for p in global_proxies:
         if datetime.datetime.now() - p['last_use_time'] > datetime.timedelta(1):
             p['times'] = 0
