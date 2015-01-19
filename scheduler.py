@@ -33,7 +33,7 @@ def run(flag):
             break
         voter.vote(p)
         vote_no = vote_no + 1
-        next_inteval = random.randint(2,interval*2)
+        next_inteval = random.randint(2,int(interval*2))
         print "Vote:%d done with %s! Wait %d ms for next vote"%(vote_no,p["ip"].decode('utf-8').encode('gb2312'),next_inteval*1000)
         time.sleep(next_inteval)
 
