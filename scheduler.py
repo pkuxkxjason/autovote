@@ -5,6 +5,7 @@ import voter
 import time
 import sys
 import random
+import datetime
 
 def run(flag):
     if flag <> '-l':
@@ -22,13 +23,17 @@ def run(flag):
     vote_no = 0
 
     while True:
+        now = datetime.datetime.now()
+        if now.hour > 22 and now.hour < 7:
+            time.sleep(1800)
+            continue
         p = myproxy.get_one_proxy()
         if len(p) == 0:
             print "out of proxy!"
             break
         voter.vote(p)
         vote_no = vote_no + 1
-        next_inteval = interval + random.randint(int(-interval/2),int(interval/2))
+        next_inteval = random.randint(2,interval*2)
         print "Vote:%d done with %s! Wait %d ms for next vote"%(vote_no,p["ip"].decode('utf-8').encode('gb2312'),next_inteval*1000)
         time.sleep(next_inteval)
 
