@@ -9,7 +9,7 @@ import datetime
 
 def run(flag):
     if flag <> '-l':
-       scraperloader.load_scraper()
+       proxies.scraperloader.load_scraper()
 
     myproxy.load_proxy()
     
