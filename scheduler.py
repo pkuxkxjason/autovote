@@ -24,7 +24,7 @@ def run(flag):
 
     while True:
         now = datetime.datetime.now()
-        if now.hour > 22 and now.hour < 7:
+        if (now.hour >= 22 and now.hour <= 23) or (now.hour >= 0 and now.hour <= 7):
             time.sleep(1800)
             continue
         p = myproxy.get_one_proxy()
